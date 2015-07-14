@@ -16,9 +16,10 @@ partidas$subpartida <- str_replace_all(partidas$subpartida, fixed(" "), "")
 
 # Quito las filas vacías
 partidas <- partidas[!is.na(partidas$year), ]
-
 partidasdt <- data.table(partidas)
-
 partidas <- as.data.frame(partidasdt[,.SD[which.max(year)], by = c('subpartida')])
+
+# Solo vamos a dejar la subpartida, la descipcion y el codigo cuci
+partidas <- partidas[,c('subpartida', 'cuci', 'descripcion')]
            
 save(partidas, file = 'Correlativa/partidas.Rda')
