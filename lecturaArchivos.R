@@ -5,11 +5,11 @@
 rm(list=ls())
 library(readr)
 
-# Modificar WD a conveniencia
-ruta <- "/Users/fabiangarcia/Documents/BBVA/Comercio/AVAN"
+# Modificar WD a conveniencia. La data esta organizada por carpetas por año.
+ruta <- "/Users/fabiangarcia/Documents/BBVA/Exportaciones/AVAN"
 
 # Cambiar ano a conveniencia y correr
-year = "2009"
+year = "2015"
 ano = substr(year, 3, 4)
 
 # Directorio
@@ -37,14 +37,14 @@ procesamiento <- function(archivo, ano, mes) {
                  col_types =  'nncnncncnnncccnncccncnccncncnccnncccncnnnnnnnnncncncccccc')
   name <- paste0(ano,"_",mes,".Rda")
   print(name)
-  data <- data[, c("PAISDES", "FOBDOL", "PESOBRKI", "NANDINA")]
+  data <- data[, c("PAISDES", "NARTIC",  "FOBDOL", "PESOBRKI", "NANDINA")]
   data$date <- as.Date(paste(ano,mes,'01'), format = "%Y %m %d")
-  data[nchar(data[,4])==9,4] <- paste("0", data[nchar(data[,4])==9,4], sep="")
-  data[,4] <- substr(data[,4],1,10)
+  data[nchar(data[,4])==9,4] <- paste("0", data[nchar(data[,4])==9,4], sep="") # Para uniformar el codigo de la partida
+  data$NANDINA <- substr(data$NANDINA,1,10)
   save(file = name, x = data)
 }
 
-# Procesameniento mes a mes
+# Procesameniento mes a mes. Conveniente para ir pricesando el mes, a medida que vaya saliendo
 procesamiento(paste0("M101", ano, ".AVA"), year, "01")
 procesamiento(paste0("M102", ano, ".AVA"), year, "02")
 procesamiento(paste0("M103", ano, ".AVA"), year, "03")
